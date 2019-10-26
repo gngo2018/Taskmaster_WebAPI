@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.0.1" />
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Taskmaster.API.DataContract\Taskmaster.API.DataContract.csproj">
@@ -20,5 +21,15 @@
     <ProjectReference Include="..\Taskmaster.Business.DataContract\Taskmaster.Business.DataContract.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\Taskmaster.Business\Taskmaster.Business.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference Include="..\Taskmaster.Data.DataContract\Taskmaster.Data.DataContract.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MappingProfiles\" />
+    <Folder Include="Controllers\" />
   </ItemGroup>
 </Project>

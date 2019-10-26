@@ -6,5 +6,13 @@
 
   <ItemGroup>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.0.1" />
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Managers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Taskmaster.Business.DataContract\Taskmaster.Business.DataContract.csproj" />
+    <ProjectReference Include="..\Taskmaster.Data.DataContract\Taskmaster.Data.DataContract.csproj" />
   </ItemGroup>
 </Project>

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,7 +12,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Taskmaster.API.MappingProfiles;
+using Taskmaster.Business.DataContract.Task;
+using Taskmaster.Business.Managers;
 using Taskmaster.Data.DataContext;
+using Taskmaster.Data.DataContract.Task;
+using Taskmaster.Data.Repositories;
 
 namespace Taskmaster.API
 {
@@ -34,6 +40,19 @@ namespace Taskmaster.API
                     Configuration.GetConnectionString("DefaultConnection")
                     )
                 );
+
+            //Mapping Config
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new TaskMappingProfile());
+            });
+
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
+            services.AddScoped<ITaskManager, TaskManager>();
+            services.AddScoped<ITaskRepository, TaskRepository>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
