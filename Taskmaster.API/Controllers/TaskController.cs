@@ -49,5 +49,64 @@ namespace Taskmaster.API.Controllers
 
             throw new Exception();
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllTasks()
+        {
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(400);
+            }
+
+            var dto = await _manager.GetTasks();
+            var response = _mapper.Map<IEnumerable<TaskGetListItemResponse>>(dto);
+
+            return Ok(response);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetTaskById(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(400);
+            }
+
+            var dto = await _manager.GetTaskById(id);
+            var response = _mapper.Map<TaskGetListItemResponse>(dto);
+
+            return Ok(response);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateTask(TaskUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(400);
+            }
+
+            var dto = _mapper.Map<TaskUpdateDTO>(request);
+            dto.DateUpdated = DateTime.Now;
+
+            if (await _manager.UpdateTask(dto))
+                return StatusCode(202);
+
+            throw new Exception();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTask(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(400);
+            }
+
+            if (await _manager.DeleteTask(id))
+                return StatusCode(207);
+
+            throw new Exception();
+        }
     }
 }
