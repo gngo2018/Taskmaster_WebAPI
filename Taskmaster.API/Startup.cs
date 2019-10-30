@@ -33,6 +33,14 @@ namespace Taskmaster.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Add Cors
+            services.AddCors(options => options.AddPolicy("MyPolicy", builder =>
+            {
+                builder.WithOrigins("http://localhost:4200")
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
+
             services.AddControllers();
 
             services.AddDbContext<TaskmasterContext>
@@ -68,6 +76,9 @@ namespace Taskmaster.API
             app.UseRouting();
 
             app.UseAuthorization();
+
+            //CORS issue
+            app.UseCors("MyPolicy");
 
             app.UseEndpoints(endpoints =>
             {
