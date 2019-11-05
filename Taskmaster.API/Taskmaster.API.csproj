@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
+    <DockerComposeProjectPath>../docker-compose.dcproj</DockerComposeProjectPath>
+    <UserSecretsId>eade68c0-eb3f-4273-ba66-b0952878e8ff</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,5 +34,8 @@
   <ItemGroup>
     <Folder Include="MappingProfiles\" />
     <Folder Include="Controllers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Dockerfile" />
   </ItemGroup>
 </Project>
