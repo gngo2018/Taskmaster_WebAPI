@@ -79,8 +79,7 @@ namespace Taskmaster.API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateTask(TaskUpdateRequest request)
-        {
+        public async Task<IActionResult> UpdateTask(TaskUpdateRequest request)        {
             if (!ModelState.IsValid)
             {
                 return StatusCode(400);

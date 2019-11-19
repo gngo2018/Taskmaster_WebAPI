@@ -1,0 +1,16 @@
+version: '3.4'
+
+services:
+  taskmaster.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_HTTPS_PORT=44307
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=crypticpassword
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/root/.aspnet/https/aspnetapp.pfx
+    ports:
+      - "5001:80"
+      - "44396:443"
+    volumes:
+      - ~/.aspnet/https:/root/.aspnet/https:ro
+      - ~/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro
