@@ -3,6 +3,23 @@ version: '3.4'
 services:
   taskmaster.api:
     image: ${DOCKER_REGISTRY-}taskmaster
+    depends_on:
+        - "postgres_image"
     build:
       context: .
       dockerfile: Taskmaster.API/Dockerfile
+    ports:
+        - "8000:80"
+    environment:
+        DefaultConnection: "Server=postgres_image;Port=5432;Database=Taskmaster;Username=georgego;Password=taskmaster"
+
+#Postgres DB
+  postgres_image:
+    image: postgres:latest
+    ports:
+        - "5432"
+    restart: always
+    environment:
+        POSTGRES_USER: "georgego"
+        POSTGRES_PASSWORD: "taskmaster"
+        POSTGRES_DB: "Taskmaster"
