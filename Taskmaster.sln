@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taskmaster.Business.DataCon
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taskmaster.Data.DataContract", "Taskmaster.Data.DataContract\Taskmaster.Data.DataContract.csproj", "{DBC2C81A-E918-48F9-BBB4-48ACF71ED896}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{78B86635-5752-47EB-9A39-D807904DBC63}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,5 +45,9 @@ Global
 		{DBC2C81A-E918-48F9-BBB4-48ACF71ED896}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DBC2C81A-E918-48F9-BBB4-48ACF71ED896}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DBC2C81A-E918-48F9-BBB4-48ACF71ED896}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78B86635-5752-47EB-9A39-D807904DBC63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78B86635-5752-47EB-9A39-D807904DBC63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78B86635-5752-47EB-9A39-D807904DBC63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78B86635-5752-47EB-9A39-D807904DBC63}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
