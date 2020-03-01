@@ -24,14 +24,14 @@ namespace Taskmaster.Data.Repositories
         {
             var entity = _mapper.Map<TaskDataModel>(rao);
 
-            await _context.Task.AddAsync(entity);
+            await _context.TaskTableAccess.AddAsync(entity);
 
             return await _context.SaveChangesAsync() == 1;
         }
 
         public async Task<IEnumerable<TaskGetListItemRAO>> GetTasks()
         {
-            var query = await _context.Task.ToArrayAsync();
+            var query = await _context.TaskTableAccess.ToArrayAsync();
             var rao = _mapper.Map<IEnumerable<TaskGetListItemRAO>>(query);
 
             return rao;
@@ -39,7 +39,7 @@ namespace Taskmaster.Data.Repositories
 
         public async Task<TaskGetListItemRAO> GetTaskById(int id)
         {
-            var query = await _context.Task.FirstOrDefaultAsync(q => q.TaskId == id);
+            var query = await _context.TaskTableAccess.FirstOrDefaultAsync(q => q.TaskId == id);
             var rao = _mapper.Map<TaskGetListItemRAO>(query);
 
             return rao;
@@ -47,7 +47,7 @@ namespace Taskmaster.Data.Repositories
 
         public async Task<bool> UpdateTask(TaskUpdateRAO rao)
         {
-            var entity = await _context.Task.SingleOrDefaultAsync(e => e.TaskId == rao.TaskId);
+            var entity = await _context.TaskTableAccess.SingleOrDefaultAsync(e => e.TaskId == rao.TaskId);
 
             entity.TaskName = rao.TaskName;
             entity.TaskDescription = rao.TaskDescription;
@@ -61,8 +61,8 @@ namespace Taskmaster.Data.Repositories
 
         public async Task<bool> DeleteTask(int id)
         {
-            var query = await _context.Task.FirstOrDefaultAsync(q => q.TaskId == id);
-            _context.Task.Remove(query);
+            var query = await _context.TaskTableAccess.FirstOrDefaultAsync(q => q.TaskId == id);
+            _context.TaskTableAccess.Remove(query);
 
             return await _context.SaveChangesAsync() == 1;
 

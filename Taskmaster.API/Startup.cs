@@ -1,22 +1,29 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Taskmaster.API.MappingProfiles;
 using Taskmaster.Business.DataContract.Task;
 using Taskmaster.Business.Managers;
 using Taskmaster.Data.DataContext;
 using Taskmaster.Data.DataContract.Task;
+using Taskmaster.Data.Entities;
 using Taskmaster.Data.Repositories;
 
 namespace Taskmaster.API
@@ -33,6 +40,40 @@ namespace Taskmaster.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<TaskmasterContext>
+                (options => options.UseNpgsql(
+                    Configuration.GetConnectionString("DefaultConnection")
+                    )
+                );
+
+            //Auth Settings
+            IdentityBuilder builder = services.AddIdentityCore<UserEntity>(opt =>
+            {
+                opt.Password.RequireDigit = true;
+                opt.Password.RequiredLength = 6;
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequireUppercase = true;
+            });
+
+            builder = new IdentityBuilder(builder.UserType, typeof(RoleEntity), builder.Services);
+            builder.AddEntityFrameworkStores<TaskmasterContext>();
+            builder.AddRoleValidator<RoleValidator<RoleEntity>>();
+            builder.AddRoleManager<RoleManager<RoleEntity>>();
+            builder.AddSignInManager<SignInManager<UserEntity>>();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII
+                            .GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
+
             // Add Cors
             services.AddCors(options => options.AddPolicy("MyPolicy", builder =>
             {
@@ -43,11 +84,6 @@ namespace Taskmaster.API
 
             services.AddControllers();
 
-            services.AddDbContext<TaskmasterContext>
-                (options => options.UseNpgsql(
-                    Configuration.GetConnectionString("DefaultConnection")
-                    )
-                );
 
             //Mapping Config
             var mappingConfig = new MapperConfiguration(mc =>

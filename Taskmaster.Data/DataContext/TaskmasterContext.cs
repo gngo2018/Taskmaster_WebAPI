@@ -1,17 +1,29 @@
 ﻿using System;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Taskmaster.Data.Entities;
 
 namespace Taskmaster.Data.DataContext
 {
-    public class TaskmasterContext : DbContext
+    public class TaskmasterContext : IdentityDbContext
+        <UserEntity,
+        RoleEntity,
+        int,
+        IdentityUserClaim<int>,
+        UserRoleEntity,
+        IdentityUserLogin<int>,
+        IdentityRoleClaim<int>,
+        IdentityUserToken<int>>
     {
         public TaskmasterContext(DbContextOptions<TaskmasterContext> options)
             : base(options)
         {
         }
 
-        public DbSet<TaskDataModel> Task { get; set; }
+        public DbSet<UserEntity> UserTableAccess { get; set; }
+
+        public DbSet<TaskDataModel> TaskTableAccess { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -42,8 +54,21 @@ namespace Taskmaster.Data.DataContext
                 entity.Property(prop => prop.IsCompleted)
                     .IsRequired();
             });
+
+            modelBuilder.Entity<UserRoleEntity>(userRole =>
+            {
+                userRole.HasKey(ur => new { ur.UserId, ur.RoleId });
+
+                userRole.HasOne(ur => ur.Role)
+                    .WithMany(r => r.UserRoles)
+                    .HasForeignKey(ur => ur.RoleId)
+                    .IsRequired();
+
+                userRole.HasOne(ur => ur.User)
+                    .WithMany(r => r.UserRoles)
+                    .HasForeignKey(ur => ur.UserId)
+                    .IsRequired();
+            });
         }
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //    => modelBuilder.ApplyConfiguration(new TaskConfig());
     }
 }
